@@ -6,7 +6,8 @@ import Cookies from 'js-cookie';
 
 import Container from '@mui/material/Container';
 import Navbar from '../components/headers/navbar';
-import AuthContext from '../context/authContext';
+// import AuthContext from '../context/authContext';
+import { AuthProvider } from '../hooks/authContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   axios.defaults.baseURL = 'http://localhost:8001/api/v1';
@@ -23,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{isLogin}}>
+    <AuthProvider>
       {/* <Container maxWidth="sm">
         {isLogin && <Navbar />}
         <Component {...pageProps} />
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <h1>hello: {isLogin ? "hello" : "not"}</h1>
       {isLogin && <Navbar />}
       <Component {...pageProps} />
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 }
 

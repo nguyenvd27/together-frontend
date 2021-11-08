@@ -2,7 +2,6 @@ import Login from "../pages/login";
 import AuthContext from '../context/authContext';
 import { useContext } from 'react';
 
-
 const withAuth = (Component: any) => {
   const Auth = (props: any) => {
     // Login data added to props via redux-store (or use react context for example)
