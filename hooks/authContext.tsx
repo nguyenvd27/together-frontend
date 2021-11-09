@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface IAuthInfo {
-  isLogin: boolean;
-  setIsLogin: (isLogin: boolean) => void;
+  isLogined: boolean;
+  setIsLogined: (isLogined: boolean) => void;
 }
 
 const authInfoDefaulValue: IAuthInfo = {
-  isLogin: false,
-  setIsLogin: (isLogin: boolean) => isLogin,
+  isLogined: false,
+  setIsLogined: (isLogined: boolean) => isLogined,
 };
 
 type Props = {
@@ -18,11 +18,11 @@ export const AuthContext = createContext<IAuthInfo>(authInfoDefaulValue);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: Props) => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isLogined, setIsLogined] = useState<boolean>(false);
 
   const value: IAuthInfo = {
-    isLogin,
-    setIsLogin,
+    isLogined,
+    setIsLogined,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

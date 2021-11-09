@@ -6,9 +6,9 @@ interface Props {}
 
 const Layout: React.FC<Props> = ({ children }) => {
   const token = Cookies.get("token");
-  const { setIsLogin } = useAuth();
+  const { setIsLogined } = useAuth();
   useEffect(() => {
-    setIsLogin(!!token);
+    setIsLogined(!!token);
   }, [token]);
   return <div>{children}</div>;
 };

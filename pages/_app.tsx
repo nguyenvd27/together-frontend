@@ -1,12 +1,11 @@
 import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-import Container from '@mui/material/Container';
-import Navbar from '../components/headers/navbar';
-// import AuthContext from '../context/authContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { AuthProvider } from '../hooks/authContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -15,24 +14,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     'token'
   )}`;
 
-  const token = Cookies.get('token');
-  console.log("token: ", token)
-  const [isLogin, setIsLogin] = useState(false);
-  // setIsLogin(token ? true : false);
-  useEffect(() => {
-    setIsLogin(token ? true : false);
-  }, [token]);
-
   return (
     <AuthProvider>
-      {/* <Container maxWidth="sm">
-        {isLogin && <Navbar />}
-        <Component {...pageProps} />
-      </Container> */}
-      <h1>hello: {isLogin ? "hello" : "not"}</h1>
-      {isLogin && <Navbar />}
+      <ToastContainer />
       <Component {...pageProps} />
     </AuthProvider>
+    
   );
 }
 
