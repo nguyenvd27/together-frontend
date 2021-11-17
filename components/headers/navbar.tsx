@@ -1,19 +1,20 @@
 import type { NextPage } from 'next'
+// import Link from "next/link"
 import { SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Button from '@mui/material/Button';
-
 import { useAuth } from '../../hooks/authContext';
 import { toastError, toastSuccess } from '../../utils/toast';
+
+import Button from '@mui/material/Button';
+import AppBar from '@mui/material/AppBar';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 const Navbar: NextPage = () => {
   const router = useRouter();
@@ -46,28 +47,50 @@ const Navbar: NextPage = () => {
 
   return (
     <>
-      <BottomNavigation sx={{ width: 500 }} value={value} onChange={handleChange}>
-        <BottomNavigationAction
-          label="Recents"
-          value="recents"
-          icon={<RestoreIcon />}
-        />
-        <BottomNavigationAction
-          label="Favorites"
-          value="favorites"
-          icon={<FavoriteIcon />}
-        />
-        <BottomNavigationAction
-          label="Nearby"
-          value="nearby"
-          icon={<LocationOnIcon />}
-        />
-        <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
-      </BottomNavigation>
-      <Button variant="outlined" onClick={logout}>
-        Logout
-      </Button>
-    </>
+    <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
+      <CssBaseline />
+      <AppBar
+        position="static"
+        color="default"
+        elevation={0}
+        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+      >
+        <Toolbar sx={{ flexWrap: 'wrap' }}>
+          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+            Together
+          </Typography>
+          <nav>
+            <Link
+              variant="button"
+              color="text.primary"
+              href="/events"
+              sx={{ my: 1, mx: 1.5 }}
+            >
+              All Events
+            </Link>
+            <Link
+              variant="button"
+              color="text.primary"
+              href="#"
+              sx={{ my: 1, mx: 1.5 }}
+            >
+              My Events
+            </Link>
+            <Link
+              variant="button"
+              color="text.primary"
+              href="#"
+              sx={{ my: 1, mx: 1.5 }}
+            >
+              Support
+            </Link>
+          </nav>
+          <Button href="#" variant="outlined" sx={{ my: 1, mx: 1.5 }} onClick={logout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+      </>
   );
 }
 

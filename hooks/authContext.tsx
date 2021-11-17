@@ -6,7 +6,7 @@ interface IAuthInfo {
 }
 
 const authInfoDefaulValue: IAuthInfo = {
-  isLogined: false,
+  isLogined: true,
   setIsLogined: (isLogined: boolean) => isLogined,
 };
 
@@ -18,7 +18,7 @@ export const AuthContext = createContext<IAuthInfo>(authInfoDefaulValue);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: Props) => {
-  const [isLogined, setIsLogined] = useState<boolean>(false);
+  const [isLogined, setIsLogined] = useState<boolean>(true);
 
   const value: IAuthInfo = {
     isLogined,
