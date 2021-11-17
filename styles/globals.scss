@@ -1,0 +1,44 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.box-center {
+  display: flex;
+  justify-content: center;
+}
+
+// Dropzone
+.dzu-previewImage {
+  max-height: 100px !important;
+}
+
+.dzu-inputLabelWithFiles {
+  margin-bottom: 10px;
+  margin-top: 10px !important;
+}
+
+.dzu-inputLabel {
+  color:rgba(0, 0, 0, 0.6) !important;
+}
+
+// line-clamp
+.line-clamp {
+  overflow: hidden;
+  height: 42px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
