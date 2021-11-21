@@ -4,26 +4,24 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-import {useAuth} from '../../hooks/authContext';
-import Layout from '../../components/layout';
-import Navbar from '../../components/headers/navbar';
-import CopyrightBox from '../../components/copyright/copyrightBox';
-import CustomCarousel from '../../components/carousel/carousel';
-import EventDetailComponent from '../../components/events/eventDetail';
-import Sidebar from '../../components/events/sideBar';
-import { IEvent, IUser } from '../../interfaces/event';
-import EditDeteteEventButton from '../../components/buttons/buttonEvent';
+import {useAuth} from '../../../hooks/authContext';
+import Layout from '../../../components/layout';
+import Navbar from '../../../components/headers/navbar';
+import CopyrightBox from '../../../components/copyright/copyrightBox';
+import CustomCarousel from '../../../components/carousel/carousel';
+import EventDetailComponent from '../../../components/events/eventDetail';
+import Sidebar from '../../../components/events/sideBar';
+import { IEvent, IUser } from '../../../interfaces/event';
+import EditDeteteEventButton from '../../../components/buttons/buttonEvent';
 
 import { CssBaseline, Box, Container, Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import GitHubIcon from '@mui/icons-material/GitHub';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import {GitHub, Facebook, Twitter} from '@mui/icons-material';
 const social = [
-  { name: 'GitHub', icon: GitHubIcon },
-  { name: 'Twitter', icon: TwitterIcon },
-  { name: 'Facebook', icon: FacebookIcon },
+  { name: 'GitHub', icon: GitHub },
+  { name: 'Twitter', icon: Twitter },
+  { name: 'Facebook', icon: Facebook },
 ]
 
 const EventDetail: NextPage = () => {
@@ -51,7 +49,6 @@ const EventDetail: NextPage = () => {
   useEffect(() => {
     if(typeof id === 'undefined') return;
     setCurrentUser(JSON.parse(localStorage.getItem("user")!));
-    console.log("router: ", id)
     fetchData(id.toString())
   },[id]);
 

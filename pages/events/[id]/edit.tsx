@@ -3,13 +3,14 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-import {useAuth} from '../../hooks/authContext';
-import Layout from '../../components/layout';
-import Navbar from '../../components/headers/navbar';
-import { toastError, toastSuccess } from '../../utils/toast';
-import Uploader from '../../components/upload/uploader';
-import locations from '../../utils/location';
-import CopyrightBox from '../../components/copyright/copyrightBox';
+import {useAuth} from '../../../hooks/authContext';
+import Layout from '../../../components/layout';
+import Navbar from '../../../components/headers/navbar';
+import { toastError, toastSuccess } from '../../../utils/toast';
+import EditUploader from '../../../components/upload/editUploader';
+import locations from '../../../utils/location';
+import CopyrightBox from '../../../components/copyright/copyrightBox';
+import { IEvent } from '../../../interfaces/event';
 
 import {Button, TextField, InputLabel, FormControl, Typography, Container, Box, Grid, Backdrop, CircularProgress} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -17,6 +18,12 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat)
+dayjs.extend(relativeTime)
 
 interface State {
   title: string;
@@ -31,12 +38,8 @@ interface State {
 const EventNew: NextPage = () => {
   const router = useRouter();
   const {isLogined} = useAuth();
-
-  useEffect(() => {
-    if(!isLogined) {
-      router.push("/login")
-    }
-  }, [isLogined]);
+  const {id} = router.query;
+  const [event, setEvent] = useState<IEvent>()
 
   const [title, setTitle] = useState<string>('');
   const [errorTitle, setErrorTitle] = useState<boolean>(false);
@@ -47,8 +50,47 @@ const EventNew: NextPage = () => {
   const [location, setLocation] = useState<string>('');
   const [detailLocation, setDetailLocation] = useState<string>('');
   const [images, setImages] = useState<FileList | null>(null);
+  const [initImages, setInitImages] = useState<File[]>([])
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(!isLogined) {
+      router.push("/login")
+    }
+  }, [isLogined]);
+
+  const fetchData = async (eventId: string) => {
+    try {
+      const response = await axios.get('/events/' + eventId)
+      setEvent(response.data.event)
+    } catch(err: any) {
+      console.log(err)
+    }
+  }
+  useEffect(() => {
+    if(typeof id === 'undefined') return;
+    fetchData(id.toString())
+  },[id]);
+
+  useEffect(() => {
+    if(typeof event === 'undefined' || typeof event.event_detail === 'undefined') return;
+    setTitle(event.event_detail.title)
+    setContent(event.event_detail.content)
+    setStartTime(new Date(event.event_detail.start_time))
+    setEndTime(new Date(event.event_detail.end_time))
+    setLocation(event.event_detail.location.toString())
+    setDetailLocation(event.event_detail.detail_location)
+
+    event.event_detail.event_images.map((eventImage) => {
+      fetch(eventImage.image_url).then(res => {
+        res.arrayBuffer().then(buf => {
+          console.log("image_url: ", eventImage.image_url)
+          setInitImages([new File([buf], eventImage.image_url, { type: 'image/*'})])
+        })
+      })
+    })
+  },[event]);
 
   const handleChange =
   (prop: keyof State) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +106,7 @@ const EventNew: NextPage = () => {
   };
 
   const handleChangeImages = (files: FileList) => {
+    console.log("change image test")
     setImages(files)
   }
 
@@ -83,16 +126,15 @@ const EventNew: NextPage = () => {
 
     setLoading(true)
     try {
-      const user = JSON.parse(localStorage.getItem("user")!);
-
       const formData = new FormData();
+      formData.append("id", id as string);
       formData.append("title", title);
       formData.append("content", content);
       formData.append("start_time", startTime != null ? startTime.toISOString() : '');
       formData.append("end_time", endTime != null ? endTime.toISOString() : '');
       formData.append("location", location);
       formData.append("detail_location", detailLocation);
-      formData.append('created_by', user.id);
+      formData.append('created_by', event?.created_by_user.id.toString() as string);
 
       if(images != null) {
         Array.from(images).forEach((file: any) => {
@@ -100,14 +142,14 @@ const EventNew: NextPage = () => {
         })
       }
 
-      const response = await axios.post('/events', formData, {
+      const response = await axios.put('/events/' + id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       console.log("response: ", response)
       toastSuccess(response.data.message)
-      router.push('/events');
+      router.push('/events/' + id);
     } catch (err: any) {
       console.log("error: ", err)
       toastError(err)
@@ -144,12 +186,12 @@ const EventNew: NextPage = () => {
                     align="center"
                     gutterBottom
                   >
-                    New Event
+                    Edit Event
                   </Typography>
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Uploader handleChangeImages={handleChangeImages} />
+                  <EditUploader handleChangeImages={handleChangeImages} initImages={initImages} />
                 </Grid>
 
                 <Grid item xs={12}>
