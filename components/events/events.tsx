@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { IEvent, IUser } from '../../interfaces/event';
-import { toastSuccess, toastError } from '../../utils/toast';
-import Event from "./event"
-import Grid from '@mui/material/Grid';
+import { IEvent, IUser } from 'interfaces/event';
+import { toastSuccess, toastError } from 'utils/toast';
+import Event from "components/events/event"
+import {Grid} from '@mui/material';
 
 interface IEvents {
   events: Array<IEvent>

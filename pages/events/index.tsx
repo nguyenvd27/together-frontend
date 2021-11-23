@@ -4,12 +4,12 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-import {useAuth} from '../../hooks/authContext';
-import Layout from '../../components/layout';
-import Navbar from '../../components/headers/navbar';
-import CopyrightBox from '../../components/copyright/copyrightBox';
-import Events from '../../components/events/events';
-import {IEvent} from '../../interfaces/event';
+import {useAuth} from 'hooks/authContext';
+import Layout from 'components/layout';
+import Navbar from 'components/headers/navbar';
+import CopyrightBox from 'components/copyright/copyrightBox';
+import Events from 'components/events/events';
+import {IEvent} from 'interfaces/event';
 
 import { Button, CssBaseline, Stack, Box, Typography, Container, Pagination } from '@mui/material';
 // import Link from '@mui/material/Link';
@@ -89,7 +89,7 @@ const EventIndex: NextPage = (data: any) => {
             </Container>
           </Box>
           <Container sx={{ py: 2 }} maxWidth="md">
-            {events ? <Events events={events} setEvents={setEvents} /> : ''}
+            {events && <Events events={events} setEvents={setEvents} />}
             <Stack
                 sx={{ pt: 3 }}
                 direction="row"

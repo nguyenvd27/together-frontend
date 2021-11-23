@@ -5,16 +5,10 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { useAuth } from '../../hooks/authContext';
-import { toastError, toastSuccess } from '../../utils/toast';
+import { useAuth } from 'hooks/authContext';
+import { toastError, toastSuccess } from 'utils/toast';
 
-import Button from '@mui/material/Button';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import GlobalStyles from '@mui/material/GlobalStyles';
+import {Button, AppBar, CssBaseline, Toolbar, Typography, Link, GlobalStyles} from '@mui/material';
 
 const Navbar: NextPage = () => {
   const router = useRouter();
