@@ -9,14 +9,9 @@ import Layout from '../../components/layout';
 import Navbar from '../../components/headers/navbar';
 import CopyrightBox from '../../components/copyright/copyrightBox';
 import Events from '../../components/events/events';
+import {IEvent} from '../../interfaces/event';
 
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Pagination from '@mui/material/Pagination';
+import { Button, CssBaseline, Stack, Box, Typography, Container, Pagination } from '@mui/material';
 // import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -25,7 +20,7 @@ const SIZE_PER_PAGE = 8
 const EventIndex: NextPage = (data: any) => {
   const router = useRouter();
   const {isLogined} = useAuth();
-  const [events, setEvents] = useState(null)
+  const [events, setEvents] = useState<IEvent[]>([])
   const [page, setPage] = useState(parseInt(router.query["page"] as string) ||  1)
   const [countPage, setCountPage] = useState(1)
   
@@ -49,7 +44,6 @@ const EventIndex: NextPage = (data: any) => {
         console.log(err)
       }
     }
-    console.log("router: ", page)
     fetchData()
   }, [page]);
 
@@ -95,7 +89,7 @@ const EventIndex: NextPage = (data: any) => {
             </Container>
           </Box>
           <Container sx={{ py: 2 }} maxWidth="md">
-            {events ? <Events events={events} /> : ''}
+            {events ? <Events events={events} setEvents={setEvents} /> : ''}
             <Stack
                 sx={{ pt: 3 }}
                 direction="row"

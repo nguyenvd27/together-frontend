@@ -36,7 +36,7 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     if(isLogined) {
-      router.push("/")
+      router.push("/events")
     } else {
       router.push("/login")
     }
@@ -82,7 +82,7 @@ const Login: NextPage = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       toastSuccess(response.data.message)
-      router.push('/');
+      router.push('/events');
     } catch (err: any) {
       console.log(err.response);
       toastError(err.response.data.message)

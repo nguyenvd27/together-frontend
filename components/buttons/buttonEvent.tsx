@@ -1,11 +1,12 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { IEvent } from '../../interfaces/event';
 import { toastSuccess, toastError } from '../../utils/toast';
 
-import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField, CircularProgress } from '@mui/material';
+import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField } from '@mui/material';
 
 interface IButtonEvent {
   event: IEvent
@@ -51,7 +52,9 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
 
   return (
     <Stack direction="row" justifyContent="center" marginTop="10px" spacing={2}>
-      <Button variant="contained">Edit</Button>
+      <Link href={"/events/" + event.event_detail.id + "/edit"}>
+        <Button variant="contained">Edit</Button>
+      </Link>
       <Button variant="contained" color="error" onClick={handleClickOpen}>Delete</Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Delete Event</DialogTitle>
