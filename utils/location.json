@@ -439,5 +439,26 @@
       "type": "tinh",
       "name_with_type": "Tỉnh Bình Phước",
       "code": "70"
+  },
+  "100": {
+    "name": "Online",
+    "slug": "online",
+    "type": "online",
+    "name_with_type": "Online",
+    "code": "100"
+  },
+  "101": {
+    "name": "Japan",
+    "slug": "japan",
+    "type": "country",
+    "name_with_type": "Japan",
+    "code": "101"
+  },
+  "102": {
+    "name": "Other",
+    "slug": "other",
+    "type": "other",
+    "name_with_type": "other",
+    "code": "102"
   }
 }

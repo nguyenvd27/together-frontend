@@ -122,7 +122,7 @@ const Register: NextPage = () => {
                 Register Account
               </Typography>
               <Box component="form" noValidate sx={{ mt: 1 }}>
-              <TextField
+                <TextField
                   margin="normal"
                   required
                   fullWidth

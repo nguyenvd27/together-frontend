@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from '../hooks/authContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  axios.defaults.baseURL = 'http://localhost:8001/api/v1';
+  axios.defaults.baseURL = process.env.NEXT_PUBLIC__SERVER_URL;
   axios.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get(
     'token'
   )}`;

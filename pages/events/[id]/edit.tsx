@@ -3,14 +3,14 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-import {useAuth} from '../../../hooks/authContext';
-import Layout from '../../../components/layout';
-import Navbar from '../../../components/headers/navbar';
-import { toastError, toastSuccess } from '../../../utils/toast';
-import EditUploader from '../../../components/upload/editUploader';
-import locations from '../../../utils/location';
-import CopyrightBox from '../../../components/copyright/copyrightBox';
-import { IEvent } from '../../../interfaces/event';
+import {useAuth} from 'hooks/authContext';
+import Layout from 'components/layout';
+import Navbar from 'components/headers/navbar';
+import { toastError, toastSuccess } from 'utils/toast';
+import EditUploader from 'components/upload/editUploader';
+import locations from 'utils/location';
+import CopyrightBox from 'components/copyright/copyrightBox';
+import { IEvent } from 'interfaces/event';
 
 import {Button, TextField, InputLabel, FormControl, Typography, Container, Box, Grid, Backdrop, CircularProgress} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
