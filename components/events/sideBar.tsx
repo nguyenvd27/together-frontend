@@ -1,7 +1,7 @@
 import NextLink from 'next/link';
 
-import { IEvent } from '../../interfaces/event'
-import locationString from '../../utils/location_string';
+import { IEvent } from 'interfaces/event'
+import locationString from 'utils/location_string';
 
 import { Link, Avatar, Typography, Paper, Stack, Grid } from '@mui/material';
 import AccessAlarmSharpIcon from '@mui/icons-material/AccessAlarmSharp';
@@ -49,7 +49,7 @@ export default function Sidebar(props: IComponentProps) {
 
       <Paper elevation={0} sx={{ p: 2, bgcolor: '#C6E2FF', marginTop: '10px' }}>
         <Typography variant="h6" gutterBottom>
-          Users
+          Users ({event.event_detail.users.length})
         </Typography>
           {event.event_detail.users.map((user) => (
             <NextLink

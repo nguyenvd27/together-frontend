@@ -5,20 +5,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Link from "next/link"
 
-import Layout from '../../components/layout';
-import { toastError, toastSuccess } from '../../utils/toast';
-import { validateEmail } from '../../utils/validator';
-import ButtonSpinner from '../../components/buttons/buttonSpinner';
-import Copyright from '../../components/copyright';
+import Layout from 'components/layout';
+import { toastError, toastSuccess } from 'utils/toast';
+import { validateEmail } from 'utils/validator';
+import ButtonSpinner from 'components/buttons/buttonSpinner';
+import Copyright from 'components/copyright';
 
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import {Avatar, CssBaseline, TextField, Paper, Box, Grid, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 interface State {
@@ -77,7 +71,7 @@ const Register: NextPage = () => {
       });
 
       console.log('response: ', response);
-      Cookies.set('token', response.data.token, { expires: 1/24 });
+      Cookies.set('token', response.data.token, { expires: 1 });
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
       toastSuccess(response.data.message)

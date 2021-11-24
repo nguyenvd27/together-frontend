@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { IEvent } from '../../interfaces/event';
-import { toastSuccess, toastError } from '../../utils/toast';
+import { IEvent } from 'interfaces/event';
+import { toastSuccess, toastError } from 'utils/toast';
 
 import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField } from '@mui/material';
 

@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import Copyright from '.';
+import Copyright from 'components/copyright';
 
 const CopyrightBox = (props: any) => {
   return (

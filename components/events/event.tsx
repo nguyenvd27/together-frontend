@@ -2,13 +2,14 @@ import Link from 'next/link';
 
 import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, Typography, Button } from '@mui/material';
 import { red } from '@mui/material/colors';
+
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 
-import locationString from '../../utils/location_string';
-import { IEvent, IUser } from '../../interfaces/event';
+import locationString from 'utils/location_string';
+import { IEvent, IUser } from 'interfaces/event';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';

@@ -1,8 +1,7 @@
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
 
-import { IEventImage } from '../../interfaces/event'
-import Item from './item'
+import { IEventImage } from 'interfaces/event'
+import Item from 'components/carousel/item'
 
 const Carousel = dynamic(
   () => import('react-material-ui-carousel'),
@@ -15,9 +14,6 @@ interface IComponentProps {
 
 export default function CustomCarousel(props: IComponentProps){
   const {eventImages} = props
-  useEffect(() => {
-    console.log("eventImages: ", eventImages)
-  }, [])
 
   return (
     <Carousel>
