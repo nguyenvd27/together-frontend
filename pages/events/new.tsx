@@ -36,7 +36,7 @@ const EventNew: NextPage = () => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
   const [title, setTitle] = useState<string>('');
   const [errorTitle, setErrorTitle] = useState<boolean>(false);

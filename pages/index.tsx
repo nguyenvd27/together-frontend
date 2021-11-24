@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
   const homePage = async (e: SyntheticEvent) => {
     try {
