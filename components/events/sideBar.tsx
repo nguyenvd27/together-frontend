@@ -49,7 +49,7 @@ export default function Sidebar(props: IComponentProps) {
 
       <Paper elevation={0} sx={{ p: 2, bgcolor: '#C6E2FF', marginTop: '10px' }}>
         <Typography variant="h6" gutterBottom>
-          Users ({event.event_detail.users.length})
+          Participants ({event.event_detail.users.length})
         </Typography>
           {event.event_detail.users.map((user) => (
             <NextLink
