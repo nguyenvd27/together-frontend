@@ -48,12 +48,14 @@ export default function Event(props: IEventCurrentUser) {
         }
       />
       <Link href={`/events/${event.event_detail.id}`}>
-      <CardMedia
-        component="img"
-        height="250"
-        image={event.event_detail.event_images[0] ? event.event_detail.event_images[0].image_url : "/images/no-image.png"}
-        alt="event image"
-      />
+        <a>
+          <CardMedia
+            component="img"
+            height="250"
+            image={event.event_detail.event_images[0] ? event.event_detail.event_images[0].image_url : "/images/no-image.png"}
+            alt="event image"
+          />
+        </a>
       </Link>
       <CardContent>
         <Typography variant="body2" color="text.secondary" className="line-clamp">

@@ -37,7 +37,7 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
     } else {
       setDisable(true);
     }
-  }, [title])
+  }, [title, event.event_detail.title])
 
   const handleDelete = async () => {
     try {
@@ -53,7 +53,7 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
   return (
     <Stack direction="row" justifyContent="center" marginTop="10px" spacing={2}>
       <Link href={"/events/" + event.event_detail.id + "/edit"}>
-        <Button variant="contained">Edit</Button>
+        <a><Button variant="contained">Edit</Button></a>
       </Link>
       <Button variant="contained" color="error" onClick={handleClickOpen}>Delete</Button>
       <Dialog open={open} onClose={handleClose}>

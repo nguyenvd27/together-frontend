@@ -33,24 +33,24 @@ const EventDetail: NextPage = () => {
   const [currentUser, setCurrentUser] = useState<IUser>()
   const [openModalLeaveEvent, setoOpenModalLeaveEvent] = useState(false);
 
-  const fetchData = async (eventId: string) => {
-    try {
-      const response = await axios.get('/events/' + eventId)
-      setEvent(response.data.event)
-    } catch(err: any) {
-      console.log(err)
-    }
-  }
-
   useEffect(() => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
   useEffect(() => {
     if(typeof id === 'undefined') return;
     setCurrentUser(JSON.parse(localStorage.getItem("user")!));
+
+    const fetchData = async (eventId: string) => {
+      try {
+        const response = await axios.get('/events/' + eventId)
+        setEvent(response.data.event)
+      } catch(err: any) {
+        console.log(err)
+      }
+    }
     fetchData(id.toString())
   },[id]);
 

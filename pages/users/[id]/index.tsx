@@ -88,7 +88,7 @@ const EventDetail: NextPage = () => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
   useEffect(() => {
     if(typeof id === 'undefined') return;

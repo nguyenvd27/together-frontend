@@ -58,18 +58,18 @@ const EventNew: NextPage = () => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
-  const fetchData = async (eventId: string) => {
-    try {
-      const response = await axios.get('/events/' + eventId)
-      setEvent(response.data.event)
-    } catch(err: any) {
-      console.log(err)
-    }
-  }
   useEffect(() => {
     if(typeof id === 'undefined') return;
+    const fetchData = async (eventId: string) => {
+      try {
+        const response = await axios.get('/events/' + eventId)
+        setEvent(response.data.event)
+      } catch(err: any) {
+        console.log(err)
+      }
+    }
     fetchData(id.toString())
   },[id]);
 

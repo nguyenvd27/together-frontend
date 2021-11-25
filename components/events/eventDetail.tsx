@@ -45,21 +45,20 @@ export default function EventDetailComponent(props: IComponentProps) {
   useEffect(() => {
     setCurrentUser(JSON.parse(localStorage.getItem("user")!));
   }, []);
-
-  const fetchData = async (eventId: number) => {
-    try {
-      const response = await axios.get('/events/' + eventId + '/comments?comment_page=' + commentPage)
-      setComments(response.data.comments)
-      setCommentPage(response.data.comment_page)
-      setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_COMMENTS_PER_PAGE))
-      setTotalComments(response.data.total)
-    } catch(err: any) {
-      console.log(err)
-    }
-  }
   
   useEffect(() => {
     if(typeof event === 'undefined') return;
+    const fetchData = async (eventId: number) => {
+      try {
+        const response = await axios.get('/events/' + eventId + '/comments?comment_page=' + commentPage)
+        setComments(response.data.comments)
+        setCommentPage(response.data.comment_page)
+        setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_COMMENTS_PER_PAGE))
+        setTotalComments(response.data.total)
+      } catch(err: any) {
+        console.log(err)
+      }
+    }
     fetchData(event.event_detail.id)
   }, [event, commentPage, newComment, deletedComment])
 

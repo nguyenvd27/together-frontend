@@ -32,7 +32,7 @@ const EventIndex: NextPage = (data: any) => {
     if(!isLogined) {
       router.push("/login")
     }
-  }, [isLogined]);
+  }, [isLogined, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +70,7 @@ const EventIndex: NextPage = (data: any) => {
                 color="text.primary"
                 gutterBottom
               >
-                Let's make it Together
+                Let&apos;s make it Together
               </Typography>
               <Typography variant="h5" align="center" color="text.secondary" paragraph>
                 Something short and leading about the collection below—its contents,
@@ -83,7 +83,7 @@ const EventIndex: NextPage = (data: any) => {
                 justifyContent="center"
               >
                 <Link href="/events/new">
-                  <Button variant="contained">Creat a new event</Button>
+                  <a><Button variant="contained">Creat a new event</Button></a>
                 </Link>
               </Stack>
             </Container>
