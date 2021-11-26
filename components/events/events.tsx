@@ -14,6 +14,7 @@ interface IEvents {
 export default function Events(props: IEvents) {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null)
   const { events, setEvents } = props;
+  const [isloadingJoinEvent, setIsLoadingJoinEvent] = useState<string>("");
 
   useEffect(() => {
     setCurrentUser(JSON.parse(localStorage.getItem("user")!));
@@ -27,19 +28,20 @@ export default function Events(props: IEvents) {
 
   const onJoinEvent = async (event: IEvent) => {
     try {
+      setIsLoadingJoinEvent(event.event_detail.id + "_loading")
       const response = await axios.post('/events/' + event.event_detail.id + "/join")
       const index = events.findIndex((item) => item.event_detail.id === event.event_detail.id)
-
       setEvents([
         ...events.slice(0, index),
         response.data.event,
         ...events.slice(index + 1)
       ])
-
       toastSuccess(response.data.message)
     } catch (err: any) {
       console.log(err.response);
       toastError(err.response.data.message)
+    } finally {
+      setIsLoadingJoinEvent(event.event_detail.id + "_noloading")
     }
   }
   
@@ -47,7 +49,7 @@ export default function Events(props: IEvents) {
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
       {events.map((event: IEvent) => (
         <Grid item key={event.event_detail.id} xs={6}>
-          <Event event={event} currentUser={currentUser} onJoinEvent={onJoinEvent} isJoined={getUserIsJoined(event.event_detail.users)} />
+          <Event event={event} currentUser={currentUser} onJoinEvent={onJoinEvent} isJoined={getUserIsJoined(event.event_detail.users)} isloadingJoinEvent={isloadingJoinEvent} />
         </Grid>
       ))}
     </Grid>

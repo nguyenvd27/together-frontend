@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, Typography, Button } from '@mui/material';
+import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, Typography, Button, CircularProgress } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -22,18 +22,20 @@ export interface IEventCurrentUser {
   currentUser: IUser | null;
   onJoinEvent: (event: IEvent) => void;
   isJoined: boolean;
+  isloadingJoinEvent: string;
 }
 
 export default function Event(props: IEventCurrentUser) {
-  const {event, currentUser, onJoinEvent, isJoined} = props
+  const {event, currentUser, onJoinEvent, isJoined, isloadingJoinEvent} = props
   const usersCount = event.event_detail.users.length
+  const isLoadingBoolean = isloadingJoinEvent === `${event.event_detail.id}_loading`
 
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+          <Avatar sx={{ bgcolor: red[500], fontSize: "small" }} aria-label="recipe">
+            New
           </Avatar>
         }
         action={
@@ -76,8 +78,10 @@ export default function Event(props: IEventCurrentUser) {
       <CardActions disableSpacing>
         <Avatar sx={{ height: '30px', width: '30px' }} alt="avatar" src={event.created_by_user.avatar ? event.created_by_user.avatar : ''} />
         <span style={{fontSize: "small", marginLeft: "5px"}}>By <b>{event.created_by_user.name}</b></span>
-        {isJoined ? <Button variant="contained" style={{marginLeft: "auto", paddingRight: "6px"}} onClick={() => onJoinEvent(event)}>Joined <RemoveRoundedIcon /></Button> :
-         <Button variant="outlined" style={{marginLeft: "auto"}} onClick={() => onJoinEvent(event)}>Join <AddIcon /></Button>}
+        {isJoined ? <Button variant="contained" style={{marginLeft: "auto", paddingRight: "6px", minWidth: "80px"}} onClick={() => onJoinEvent(event)}
+          disabled={isLoadingBoolean}>{isLoadingBoolean ? <CircularProgress size={24} /> : <>Joined <RemoveRoundedIcon /></>}</Button> :
+         <Button variant="outlined" style={{marginLeft: "auto", minWidth: "80px"}} onClick={() => onJoinEvent(event)}
+          disabled={isLoadingBoolean}>{isLoadingBoolean ? <CircularProgress size={24} /> : <>Join <AddIcon /></>}</Button>}
       </CardActions>
     </Card>
   );

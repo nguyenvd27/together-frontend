@@ -53,6 +53,7 @@ const EventNew: NextPage = () => {
   const [initImages, setInitImages] = useState<File[]>([])
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingFetchData, setLoadingFetchData] = useState<boolean>(false);
 
   useEffect(() => {
     if(!isLogined) {
@@ -64,10 +65,13 @@ const EventNew: NextPage = () => {
     if(typeof id === 'undefined') return;
     const fetchData = async (eventId: string) => {
       try {
+        setLoadingFetchData(true)
         const response = await axios.get('/events/' + eventId)
         setEvent(response.data.event)
       } catch(err: any) {
         console.log(err)
+      } finally {
+        setLoadingFetchData(false)
       }
     }
     fetchData(id.toString())
@@ -166,7 +170,7 @@ const EventNew: NextPage = () => {
       <ThemeProvider theme={theme}>
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
+          open={loading || loadingFetchData}
         >
           <CircularProgress />
         </Backdrop>

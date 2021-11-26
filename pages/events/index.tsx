@@ -11,7 +11,7 @@ import CopyrightBox from 'components/copyright/copyrightBox';
 import Events from 'components/events/events';
 import {IEvent} from 'interfaces/event';
 
-import { Button, CssBaseline, Stack, Box, Typography, Container, Pagination } from '@mui/material';
+import { Button, CssBaseline, Stack, Box, Typography, Container, Pagination, Backdrop, CircularProgress } from '@mui/material';
 // import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -23,6 +23,7 @@ const EventIndex: NextPage = (data: any) => {
   const [events, setEvents] = useState<IEvent[]>([])
   const [page, setPage] = useState(parseInt(router.query["page"] as string) ||  1)
   const [countPage, setCountPage] = useState(1)
+  const [isloading, setIsLoading] = useState<boolean>(false);
   
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
@@ -37,11 +38,14 @@ const EventIndex: NextPage = (data: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true)
         const response = await axios.get('/events?page=' + page)
         setEvents(response.data.events)
         setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
       } catch(err: any) {
         console.log(err)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchData()
@@ -53,6 +57,12 @@ const EventIndex: NextPage = (data: any) => {
     <Layout>
       {isLogined && <Navbar />}
       <ThemeProvider theme={theme}>
+        <Backdrop
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isloading}
+        >
+          <CircularProgress />
+        </Backdrop>
         <CssBaseline />
         <main>
           <Box
@@ -73,8 +83,7 @@ const EventIndex: NextPage = (data: any) => {
                 Let&apos;s make it Together
               </Typography>
               <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                Something short and leading about the collection below—its contents,
-                the creator, etc.
+                Together, we can make the World better
               </Typography>
               <Stack
                 sx={{ pt: 2 }}
@@ -96,11 +105,11 @@ const EventIndex: NextPage = (data: any) => {
                 spacing={2}
                 justifyContent="center"
               >
-                <Pagination color="primary" count={countPage} page={page} onChange={handleChangePage} />
+                {!isloading && <Pagination color="primary" count={countPage} page={page} onChange={handleChangePage} />}
               </Stack>
           </Container>
         </main>
-        <CopyrightBox />
+        {!isloading && <CopyrightBox />}
       </ThemeProvider>
     </Layout>
   )
