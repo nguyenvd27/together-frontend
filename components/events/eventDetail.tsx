@@ -2,7 +2,7 @@ import NextLink from 'next/link';
 import { useEffect, useState, ChangeEvent } from 'react';
 import axios from 'axios';
 
-import { Avatar, Stack, Divider, Typography, Grid, Button,
+import { Avatar, Stack, Divider, Typography, Grid, Button, CircularProgress,
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -23,12 +23,13 @@ interface IComponentProps {
   onJoinEvent: () => void;
   openModalLeaveEvent: boolean
   setoOpenModalLeaveEvent: (openModalLeaveEvent: boolean) => void;
+  isloadingJoinEvent: boolean
 }
 
 const SIZE_COMMENTS_PER_PAGE = 8
 
 export default function EventDetailComponent(props: IComponentProps) {
-  const { event, onJoinEvent, openModalLeaveEvent, setoOpenModalLeaveEvent } = props;
+  const { event, onJoinEvent, openModalLeaveEvent, setoOpenModalLeaveEvent, isloadingJoinEvent } = props;
   const [comments, setComments] = useState<IComment[]>([])
   const [commentPage, setCommentPage] = useState<number>(1)
   const [countPage, setCountPage] = useState<number>(1)
@@ -38,6 +39,7 @@ export default function EventDetailComponent(props: IComponentProps) {
   const [openModalDeleteComment, setOpenModalDeleteComment] = useState(false);
   const [deletedComment, setDeletedComment] = useState<IComment>()
   const [loading, setLoading] = useState<boolean>(false)
+  const [isloadingDeleteComment, setIsLoadingDeleteComment] = useState<boolean>(false)
   
   const [currentUser, setCurrentUser] = useState<IUser | null>(null)
   const [isJoined, setIsJoined] = useState<boolean>(false);
@@ -91,6 +93,7 @@ export default function EventDetailComponent(props: IComponentProps) {
 
   const handleDeleteComment = async (commentId: number) => {
     try {
+      setIsLoadingDeleteComment(true)
       const response = await axios.delete('/events/' + event.event_detail.id + '/comments/' + commentId)
       toastSuccess(response.data.message)
       setDeletedComment(response.data.comment)
@@ -98,7 +101,8 @@ export default function EventDetailComponent(props: IComponentProps) {
       console.log(err)
       toastError(err.response.data.message)
     } finally {
-      setOpenModalDeleteComment(false);
+      setOpenModalDeleteComment(false)
+      setIsLoadingDeleteComment(false)
     }
   }
 
@@ -139,8 +143,8 @@ export default function EventDetailComponent(props: IComponentProps) {
       <Divider sx={{marginTop: "100px"}} />
       <Typography variant="h6" gutterBottom marginTop="10px" marginBottom="20px" display={"flex"}>
         <span>Total: {totalComments} comments</span>
-        {isJoined ? <Button variant="contained" color="error" style={{marginLeft: "auto"}} onClick={handleClickOpen}>Leave The Event</Button> :
-        <Button variant="contained" style={{marginLeft: "auto"}} onClick={onJoinEvent}>Join To Comment <AddIcon /></Button>}
+        {isJoined ? <Button variant="contained" color="error" style={{marginLeft: "auto"}} onClick={handleClickOpen} disabled={isloadingJoinEvent}>Leave The Event</Button> :
+        <Button variant="contained" style={{marginLeft: "auto", minWidth:"190px"}} onClick={onJoinEvent} disabled={isloadingJoinEvent}>{isloadingJoinEvent ? <CircularProgress size={24} /> : <>Join To Comment <AddIcon /></>}</Button>}
         <Dialog open={openModalLeaveEvent} onClose={handleClose}>
           <DialogTitle>Leave The Event</DialogTitle>
           <DialogContent>
@@ -150,7 +154,7 @@ export default function EventDetailComponent(props: IComponentProps) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={onJoinEvent} variant="contained" color="error">Leave</Button>
+            <Button onClick={onJoinEvent} variant="contained" color="error" disabled={isloadingJoinEvent}>{isloadingJoinEvent ? <CircularProgress size={24} /> : "Leave"}</Button>
           </DialogActions>
         </Dialog>
       </Typography>
@@ -158,7 +162,8 @@ export default function EventDetailComponent(props: IComponentProps) {
         setContentComment={setContentComment} loading={loading} handlePostComment={handlePostComment} />}
       <Divider sx={{marginTop: "20px"}} />
       { (comments.length > 0) && <ListComments comments={comments} currentUser={currentUser} countPage={countPage} commentPage={commentPage}
-        handleChangePage={handleChangePage} handleDeleteComment={handleDeleteComment} openModalDeleteComment={openModalDeleteComment} setOpenModalDeleteComment={setOpenModalDeleteComment} />}
+        handleChangePage={handleChangePage} handleDeleteComment={handleDeleteComment} openModalDeleteComment={openModalDeleteComment}
+        setOpenModalDeleteComment={setOpenModalDeleteComment} isloadingDeleteComment={isloadingDeleteComment} />}
     </Grid>
   );
 }

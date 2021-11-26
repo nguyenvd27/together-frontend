@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { IComment } from 'interfaces/comment';
 import { IUser } from 'interfaces/event';
 
-import { Avatar, Grid, Divider, Paper, Pagination, Stack, IconButton, Dialog,
+import { Avatar, Grid, Divider, Paper, Pagination, Stack, IconButton, Dialog, CircularProgress,
   DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
@@ -23,10 +23,12 @@ interface ICommentsProps {
   handleDeleteComment: (commentId: number) => void;
   openModalDeleteComment: boolean
   setOpenModalDeleteComment: (openModalDeleteComment: boolean) => void;
+  isloadingDeleteComment: boolean
 }
 
 export default function ListComments(props: ICommentsProps) {
-  const { comments, currentUser, countPage, commentPage, handleChangePage, handleDeleteComment, openModalDeleteComment, setOpenModalDeleteComment } = props;
+  const { comments, currentUser, countPage, commentPage, handleChangePage, handleDeleteComment,
+    openModalDeleteComment, setOpenModalDeleteComment, isloadingDeleteComment } = props;
 
   const [deleteCommentId, setDeleteCommentId] = useState(0);
 
@@ -58,7 +60,7 @@ export default function ListComments(props: ICommentsProps) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() => {handleDeleteComment(deleteCommentId); handleClose}} variant="contained" color="error">Delete</Button>
+            <Button onClick={() => {handleDeleteComment(deleteCommentId); handleClose}} disabled={isloadingDeleteComment} variant="contained" color="error">{isloadingDeleteComment ? <CircularProgress size={24} /> : "Delete"}</Button>
           </DialogActions>
         </Dialog>
         <Divider variant="fullWidth" style={{ margin: "10px 0" }} />

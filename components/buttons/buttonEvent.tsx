@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { IEvent } from 'interfaces/event';
 import { toastSuccess, toastError } from 'utils/toast';
 
-import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField } from '@mui/material';
+import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, TextField, CircularProgress } from '@mui/material';
 
 interface IButtonEvent {
   event: IEvent
@@ -17,6 +17,7 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
   const [disable, setDisable] = useState(true);
   const [title, setTitle] = useState<string>('');
   const router = useRouter();
+  const [isLoadingDeleteEvent, setIsLoadingDeleteEvent] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,12 +42,16 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
 
   const handleDelete = async () => {
     try {
+      setIsLoadingDeleteEvent(true)
       const response = await axios.delete('/events/' + event.event_detail.id)
       toastSuccess(response.data.message)
       router.push('/events');
     } catch(err: any) {
       console.log(err)
       toastError(err.response.data.message)
+    } finally {
+      setOpen(false);
+      setIsLoadingDeleteEvent(false)
     }
   }
 
@@ -75,7 +80,7 @@ const EditDeteteEventButton = (props: IButtonEvent) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} disabled={disable} variant="contained" color="error">Delete</Button>
+          <Button onClick={handleDelete} disabled={disable || isLoadingDeleteEvent} variant="contained" color="error">{isLoadingDeleteEvent ? <CircularProgress size={24} /> : "Delete"}</Button>
         </DialogActions>
       </Dialog>
     </Stack>

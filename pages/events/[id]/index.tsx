@@ -15,7 +15,7 @@ import { IEvent, IUser } from 'interfaces/event';
 import EditDeteteEventButton from 'components/buttons/buttonEvent';
 import { toastSuccess, toastError } from 'utils/toast';
 
-import { CssBaseline, Box, Container, Grid } from '@mui/material';
+import { CssBaseline, Box, Container, Grid, Backdrop, CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import {GitHub, Facebook, Twitter} from '@mui/icons-material';
@@ -32,6 +32,8 @@ const EventDetail: NextPage = () => {
   const [event, setEvent] = useState<IEvent>()
   const [currentUser, setCurrentUser] = useState<IUser>()
   const [openModalLeaveEvent, setoOpenModalLeaveEvent] = useState(false);
+  const [isloading, setIsLoading] = useState<boolean>(false);
+  const [isloadingJoinEvent, setIsLoadingJoinEvent] = useState<boolean>(false)
 
   useEffect(() => {
     if(!isLogined) {
@@ -45,10 +47,13 @@ const EventDetail: NextPage = () => {
 
     const fetchData = async (eventId: string) => {
       try {
+        setIsLoading(true)
         const response = await axios.get('/events/' + eventId)
         setEvent(response.data.event)
       } catch(err: any) {
         console.log(err)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchData(id.toString())
@@ -56,6 +61,7 @@ const EventDetail: NextPage = () => {
 
   const onJoinEvent = async () => {
     try {
+      setIsLoadingJoinEvent(true)
       const response = await axios.post('/events/' + event?.event_detail.id + "/join")
       setEvent(response.data.event)
       toastSuccess(response.data.message)
@@ -64,6 +70,7 @@ const EventDetail: NextPage = () => {
       toastError(err.response.data.message)
     } finally {
       setoOpenModalLeaveEvent(false)
+      setIsLoadingJoinEvent(false)
     }
   }
 
@@ -74,6 +81,12 @@ const EventDetail: NextPage = () => {
       {isLogined && <Navbar />}
 
     <ThemeProvider theme={theme}>
+      <Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isloading}
+      >
+        <CircularProgress />
+      </Backdrop>
       <CssBaseline />
       <main>
         <Box
@@ -87,7 +100,8 @@ const EventDetail: NextPage = () => {
             {event && <CustomCarousel eventImages={event.event_detail.event_images} />}
             {event && currentUser && (currentUser.id == event.created_by_user.id) && <EditDeteteEventButton event={event} />}
             <Grid container spacing={5} sx={{ mt: 3 }}>
-              {event && <EventDetailComponent event={event} onJoinEvent={onJoinEvent} openModalLeaveEvent={openModalLeaveEvent} setoOpenModalLeaveEvent={setoOpenModalLeaveEvent} />}
+              {event && <EventDetailComponent event={event} onJoinEvent={onJoinEvent} openModalLeaveEvent={openModalLeaveEvent}
+              setoOpenModalLeaveEvent={setoOpenModalLeaveEvent} isloadingJoinEvent={isloadingJoinEvent} />}
               {event && <Sidebar
                 event={event}
                 social={social}
@@ -96,7 +110,7 @@ const EventDetail: NextPage = () => {
           </Container>
         </Box>
       </main>
-      <CopyrightBox />
+      {!isloading && <CopyrightBox />}
     </ThemeProvider>
     </Layout>
   )
