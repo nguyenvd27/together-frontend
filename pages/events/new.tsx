@@ -18,6 +18,12 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat)
+dayjs.extend(relativeTime)
+
 interface State {
   title: string;
   content: string;
@@ -39,15 +45,17 @@ const EventNew: NextPage = () => {
   }, [isLogined, router]);
 
   const [title, setTitle] = useState<string>('');
-  const [errorTitle, setErrorTitle] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
-  const [errorContent, setErrorContent] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [endTime, setEndTime] = useState<Date | null>(new Date());
   const [location, setLocation] = useState<string>('');
   const [detailLocation, setDetailLocation] = useState<string>('');
   const [images, setImages] = useState<FileList | null>(null);
 
+  const [errorTitle, setErrorTitle] = useState<boolean>(false);
+  const [errorContent, setErrorContent] = useState<boolean>(false);
+  const [errorStartTime, setErrorStartTime] = useState<boolean>(false);
+  const [errorEndTime, setErrorEndTime] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange =
@@ -80,9 +88,17 @@ const EventNew: NextPage = () => {
       setErrorContent(true)
       return
     }
+    if(dayjs(endTime).isBefore(dayjs(startTime)) || startTime?.toISOString() == endTime?.toISOString()) {
+      setErrorStartTime(true)
+      return
+    }
+    if(dayjs().isAfter(dayjs(endTime))) {
+      setErrorEndTime(true)
+      return
+    }
 
-    setLoading(true)
     try {
+      setLoading(true)
       const user = JSON.parse(localStorage.getItem("user")!);
 
       const formData = new FormData();
@@ -107,7 +123,7 @@ const EventNew: NextPage = () => {
       });
       console.log("response: ", response)
       toastSuccess(response.data.message)
-      router.push('/events');
+      router.push('/events/' + response.data.event.id);
     } catch (err: any) {
       console.log("error: ", err)
       toastError(err)
@@ -192,9 +208,12 @@ const EventNew: NextPage = () => {
                       value={startTime}
                       onChange={(newValue) => {
                         setStartTime(newValue);
+                        setErrorStartTime(false)
+                        setErrorEndTime(false)
                       }}
                     />
                   </LocalizationProvider>
+                  {errorStartTime && <p style={{marginTop: "5px", marginBottom: "5px", fontSize: "small", color: "red"}}>Start time must be less than End time</p>}
                 </Grid>
                 <Grid item xs={12} sm={6} style={{ textAlign: "right"}}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -204,9 +223,12 @@ const EventNew: NextPage = () => {
                       value={endTime}
                       onChange={(newValue) => {
                         setEndTime(newValue);
+                        setErrorStartTime(false)
+                        setErrorEndTime(false)
                       }}
                     />
                   </LocalizationProvider>
+                  {errorEndTime && <p style={{marginTop: "5px", marginBottom: "5px", fontSize: "small", color: "red"}}>End Time must be greater than current time</p>}
                 </Grid>
 
                 <Grid item xs={12}>

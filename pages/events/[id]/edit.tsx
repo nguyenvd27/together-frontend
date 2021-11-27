@@ -42,9 +42,7 @@ const EventNew: NextPage = () => {
   const [event, setEvent] = useState<IEvent>()
 
   const [title, setTitle] = useState<string>('');
-  const [errorTitle, setErrorTitle] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
-  const [errorContent, setErrorContent] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [endTime, setEndTime] = useState<Date | null>(new Date());
   const [location, setLocation] = useState<string>('');
@@ -52,6 +50,9 @@ const EventNew: NextPage = () => {
   const [images, setImages] = useState<FileList | null>(null);
   const [initImages, setInitImages] = useState<File[]>([])
 
+  const [errorTitle, setErrorTitle] = useState<boolean>(false);
+  const [errorContent, setErrorContent] = useState<boolean>(false);
+  const [errorStartTime, setErrorStartTime] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingFetchData, setLoadingFetchData] = useState<boolean>(false);
 
@@ -127,9 +128,13 @@ const EventNew: NextPage = () => {
       setErrorContent(true)
       return
     }
+    if(dayjs(endTime).isBefore(dayjs(startTime)) || startTime?.toISOString() == endTime?.toISOString()) {
+      setErrorStartTime(true)
+      return
+    }
 
-    setLoading(true)
     try {
+      setLoading(true)
       const formData = new FormData();
       formData.append("id", id as string);
       formData.append("title", title);
@@ -238,9 +243,11 @@ const EventNew: NextPage = () => {
                       value={startTime}
                       onChange={(newValue) => {
                         setStartTime(newValue);
+                        setErrorStartTime(false)
                       }}
                     />
                   </LocalizationProvider>
+                  {errorStartTime && <p style={{marginTop: "5px", marginBottom: "5px", fontSize: "small", color: "red"}}>Start time must be less than End time</p>}
                 </Grid>
                 <Grid item xs={12} sm={6} style={{ textAlign: "right"}}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -250,6 +257,7 @@ const EventNew: NextPage = () => {
                       value={endTime}
                       onChange={(newValue) => {
                         setEndTime(newValue);
+                        setErrorStartTime(false)
                       }}
                     />
                   </LocalizationProvider>
