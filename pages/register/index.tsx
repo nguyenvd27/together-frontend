@@ -19,6 +19,7 @@ interface State {
   name: string,
   email: string;
   password: string;
+  passwordConfirm: string
   showPassword: boolean;
 }
 
@@ -28,11 +29,13 @@ const Register: NextPage = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const [errorName, setErrorName] = useState<boolean>(false);
   const [errorEmail, setErrorEmail] = useState<boolean>(false);
   const [errorPassword, setErrorPassword] = useState<boolean>(false);
+  const [errorPasswordConfirm, setErrorPasswordConfirm] = useState<boolean>(false);
 
   const handleChange =
     (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +48,9 @@ const Register: NextPage = () => {
       } else if (prop == 'password') {
         setPassword(event.target.value)
         setErrorPassword(false)
+      } else if (prop == 'passwordConfirm') {
+        setPasswordConfirm(event.target.value)
+        setErrorPasswordConfirm(false)
       }
     };
 
@@ -57,17 +63,22 @@ const Register: NextPage = () => {
       setErrorEmail(true)
       return
     }
-    if(password == '') {
+    if(password == '' || password.length < 8) {
       setErrorPassword(true)
       return
     }
+    if(password != passwordConfirm) {
+      setErrorPasswordConfirm(true)
+      return
+    }
 
-    setLoading(true)
     try {
+      setLoading(true)
       const response = await axios.post('/register', {
         name,
         email,
-        password
+        password,
+        password_confirm: passwordConfirm
       });
 
       console.log('response: ', response);
@@ -161,7 +172,21 @@ const Register: NextPage = () => {
                   autoComplete="current-password"
                   value={password}
                   onChange={handleChange('password')}
-                  helperText={errorPassword && 'Password is required'}
+                  helperText={errorPassword && 'Password must be at least 8 characters'}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password_confirm"
+                  label="Password Confirm"
+                  type="password"
+                  id="password_confirm"
+                  error={errorPasswordConfirm}
+                  autoComplete="current-password"
+                  value={passwordConfirm}
+                  onChange={handleChange('passwordConfirm')}
+                  helperText={errorPasswordConfirm && 'Password and confirm password does not match'}
                 />
                 <ButtonSpinner onClick={register} loading={loading} buttonName="Register" />
                 <Grid container>
