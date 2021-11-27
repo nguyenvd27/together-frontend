@@ -88,11 +88,11 @@ const EventNew: NextPage = () => {
       setErrorContent(true)
       return
     }
-    if(dayjs(endTime).isBefore(dayjs(startTime)) || startTime?.toISOString() == endTime?.toISOString()) {
+    if(dayjs(endTime).isBefore(dayjs(startTime)) || !dayjs(startTime).isValid() || dayjs(endTime).isSame(startTime)) {
       setErrorStartTime(true)
       return
     }
-    if(dayjs().isAfter(dayjs(endTime))) {
+    if(dayjs().isAfter(dayjs(endTime)) || !dayjs(endTime).isValid()) {
       setErrorEndTime(true)
       return
     }
