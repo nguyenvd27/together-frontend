@@ -13,12 +13,6 @@ const Home: NextPage = () => {
     router.push("/events")
   }, []);
 
-  useEffect(() => {
-    if(!isLogined) {
-      router.push("/login")
-    }
-  }, [isLogined, router]);
-
   return (
     <Layout>
     </Layout>

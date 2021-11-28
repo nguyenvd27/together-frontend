@@ -35,11 +35,6 @@ const EventDetail: NextPage = () => {
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [isloadingJoinEvent, setIsLoadingJoinEvent] = useState<boolean>(false)
 
-  useEffect(() => {
-    if(!isLogined) {
-      router.push("/login")
-    }
-  }, [isLogined, router]);
 
   useEffect(() => {
     if(typeof id === 'undefined') return;
@@ -66,8 +61,11 @@ const EventDetail: NextPage = () => {
       setEvent(response.data.event)
       toastSuccess(response.data.message)
     } catch (err: any) {
-      console.log(err.response);
-      toastError(err.response.data.message)
+      if(err.response.status == 401) {
+        toastError("You have not signed in. Click sign in to continue")
+      } else {
+        toastError(err.response.data.message)
+      }
     } finally {
       setoOpenModalLeaveEvent(false)
       setIsLoadingJoinEvent(false)
@@ -78,7 +76,7 @@ const EventDetail: NextPage = () => {
 
   return (
     <Layout>
-      {isLogined && <Navbar />}
+      <Navbar />
 
     <ThemeProvider theme={theme}>
       <Backdrop
