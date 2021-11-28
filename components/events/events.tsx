@@ -38,8 +38,11 @@ export default function Events(props: IEvents) {
       ])
       toastSuccess(response.data.message)
     } catch (err: any) {
-      console.log(err.response);
-      toastError(err.response.data.message)
+      if(err.response.status == 401) {
+        toastError("You have not signed in. Click sign in to continue")
+      } else {
+        toastError(err.response.data.message)
+      }
     } finally {
       setIsLoadingJoinEvent(event.event_detail.id + "_noloading")
     }

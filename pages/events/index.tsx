@@ -24,24 +24,32 @@ const EventIndex: NextPage = (data: any) => {
   const [page, setPage] = useState(parseInt(router.query["page"] as string) ||  1)
   const [countPage, setCountPage] = useState(1)
   const [isloading, setIsLoading] = useState<boolean>(false);
+  const [total, setTotal] = useState<number>(0)
   
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
   };
 
   useEffect(() => {
-    if(!isLogined) {
-      router.push("/login")
-    }
-  }, [isLogined, router]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const response = await axios.get('/events?page=' + page)
-        setEvents(response.data.events)
-        setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
+        if(router.query["user_id"]) {
+          const response = await axios.get('/events?page=' + page + "&user_id=" + router.query["user_id"])
+          setEvents(response.data.events)
+          setTotal(response.data.total)
+          setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
+        } else if(router.query["search"]) {
+          const response = await axios.get('/events?page=' + page + "&search=" + router.query["search"])
+          setEvents(response.data.events)
+          setTotal(response.data.total)
+          setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
+        } else {
+          const response = await axios.get('/events?page=' + page)
+          setEvents(response.data.events)
+          setTotal(response.data.total)
+          setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
+        }
       } catch(err: any) {
         console.log(err)
       } finally {
@@ -49,13 +57,17 @@ const EventIndex: NextPage = (data: any) => {
       }
     }
     fetchData()
-  }, [page]);
+  }, [page, router]);
+
+  useEffect(() => {
+    setPage(1)
+  }, [router])
 
   const theme = createTheme();
 
   return (
     <Layout>
-      {isLogined && <Navbar />}
+      <Navbar />
       <ThemeProvider theme={theme}>
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -98,6 +110,9 @@ const EventIndex: NextPage = (data: any) => {
             </Container>
           </Box>
           <Container sx={{ py: 2 }} maxWidth="md">
+            <Typography color="text.secondary" paragraph>
+              Total Events: {total}
+            </Typography>
             {events && <Events events={events} setEvents={setEvents} />}
             <Stack
                 sx={{ pt: 3 }}
