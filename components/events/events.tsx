@@ -49,9 +49,9 @@ export default function Events(props: IEvents) {
   }
   
   return (
-    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       {events.map((event: IEvent) => (
-        <Grid item key={event.event_detail.id} xs={6}>
+        <Grid item key={event.event_detail.id} xs={12} sm={12} md={6}>
           <Event event={event} currentUser={currentUser} onJoinEvent={onJoinEvent} isJoined={getUserIsJoined(event.event_detail.users)} isloadingJoinEvent={isloadingJoinEvent} />
         </Grid>
       ))}

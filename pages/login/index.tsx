@@ -26,14 +26,6 @@ const Login: NextPage = () => {
   const router = useRouter();
   const {isLogined} = useAuth();
 
-  useEffect(() => {
-    if(isLogined) {
-      router.push("/events")
-    } else {
-      router.push("/login")
-    }
-  }, [isLogined]);
-
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -74,7 +66,11 @@ const Login: NextPage = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       toastSuccess(response.data.message)
-      router.push('/events');
+      if(router.query["next-page"] == "new-event") {
+        router.push('/events/new');
+      } else {
+        router.push('/events');
+      }
     } catch (err: any) {
       console.log(err.response);
       toastError(err.response.data.message)

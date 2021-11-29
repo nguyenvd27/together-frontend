@@ -71,10 +71,8 @@ const Navbar: NextPage = () => {
   };
 
   const submitSearch = () => {
-    console.log(search)
     router.push("/events?search=" + search)
   };
-  
 
   return (
     <>
@@ -118,6 +116,11 @@ const Navbar: NextPage = () => {
             {isLogined && (<Link href={{ pathname: '/events', query: { user_id: currentUser?.id } }}>
               <a>
                 <Button variant="text">My Events</Button>
+              </a>
+            </Link>)}
+            {isLogined && (<Link href={{ pathname: '/events', query: { user_id: currentUser?.id, type: 'created' } }}>
+              <a>
+                <Button variant="text">Created Events</Button>
               </a>
             </Link>)}
           </Stack>

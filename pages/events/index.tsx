@@ -34,12 +34,20 @@ const EventIndex: NextPage = (data: any) => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        if(router.query["user_id"]) {
+        if(router.asPath.includes("user_id") && router.asPath.includes("type=created")) {
+          if(!router.query["user_id"]) return;
+          const response = await axios.get('/events?page=' + page + "&user_id=" + router.query["user_id"] + "&type=created")
+          setEvents(response.data.events)
+          setTotal(response.data.total)
+          setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
+        } else if(router.asPath.includes("user_id")) {
+          if(!router.query["user_id"]) return;
           const response = await axios.get('/events?page=' + page + "&user_id=" + router.query["user_id"])
           setEvents(response.data.events)
           setTotal(response.data.total)
           setCountPage(Math.ceil(parseInt(response.data.total as string)/SIZE_PER_PAGE))
-        } else if(router.query["search"]) {
+        } else if(router.asPath.includes("search")) {
+          if(typeof router.query["search"] == "undefined") return;
           const response = await axios.get('/events?page=' + page + "&search=" + router.query["search"])
           setEvents(response.data.events)
           setTotal(response.data.total)
@@ -57,7 +65,7 @@ const EventIndex: NextPage = (data: any) => {
       }
     }
     fetchData()
-  }, [page, router]);
+  }, [page, router.query]);
 
   useEffect(() => {
     setPage(1)
@@ -103,7 +111,7 @@ const EventIndex: NextPage = (data: any) => {
                 spacing={2}
                 justifyContent="center"
               >
-                <Link href="/events/new">
+                <Link href={isLogined ? "/events/new" : "/login?next-page=new-event"}>
                   <a><Button variant="contained">Creat a new event</Button></a>
                 </Link>
               </Stack>

@@ -245,7 +245,7 @@ const EventDetail: NextPage = () => {
         </Backdrop>
         <CssBaseline />
         <main>
-          <Box
+          {!isLoading && <Box
             sx={{
               bgcolor: 'background.paper',
               pt: 6,
@@ -404,9 +404,9 @@ const EventDetail: NextPage = () => {
                 </Box>
               </Grid>
             </Container>
-          </Box>
+          </Box>}
         </main>
-        <CopyrightBox />
+        {!isLoading && <CopyrightBox />}
       </ThemeProvider>
     </Layout>
   )
