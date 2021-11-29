@@ -1,9 +1,10 @@
 import NextLink from 'next/link';
+import { useState } from 'react';
 
 import { IEvent } from 'interfaces/event'
 import locationString from 'utils/location_string';
 
-import { Link, Avatar, Typography, Paper, Stack, Grid } from '@mui/material';
+import { Link, Avatar, Typography, Paper, Stack, Grid, Button, Dialog, DialogTitle, DialogContent, DialogContentText, Box, DialogActions } from '@mui/material';
 import AccessAlarmSharpIcon from '@mui/icons-material/AccessAlarmSharp';
 
 import dayjs from 'dayjs';
@@ -22,6 +23,15 @@ interface IComponentProps {
 
 export default function Sidebar(props: IComponentProps) {
   const { event, social } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Grid item xs={12} md={4}>
@@ -66,7 +76,46 @@ export default function Sidebar(props: IComponentProps) {
           ))}
       </Paper>
 
-      <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+      <Button variant="outlined" onClick={handleClickOpen} color="error" sx={{ mt: 3 }}>
+        Donate
+      </Button>
+      <Dialog
+        maxWidth={'sm'}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>Information</DialogTitle>
+        <DialogContent>
+          <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+            <Typography gutterBottom>
+              Bank Name: TIENPHONG COMMERCIAL JOINT STOCK BANK (TPBank)
+            </Typography>
+            <Typography gutterBottom>
+              Account Number: 04308781401
+            </Typography>
+            <Typography gutterBottom>
+              Account Name: VU DUC NGUYEN
+            </Typography>
+            <Typography gutterBottom>
+              Bank code (BIC/ SWIFT): TPBVVNVX
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+      
+      <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
         Social
       </Typography>
       {social.map((network) => (
