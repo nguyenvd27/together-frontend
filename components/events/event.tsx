@@ -38,14 +38,15 @@ export default function Event(props: IEventCurrentUser) {
             New
           </Avatar>
         }
-        action={
-          <div style={{textAlign: "right", fontSize: "small", marginTop: "5px", color: "rgba(0, 0, 0, 0.6)"}}>Created {dayjs(event.event_detail.created_at).fromNow()}</div>
-        }
-        title={event.event_detail.title}
+        // action={
+        //   <div style={{textAlign: "right", fontSize: "small", marginTop: "5px", color: "rgba(0, 0, 0, 0.6)"}}>Created {dayjs(event.event_detail.created_at).fromNow()}</div>
+        // }
+        title={<div className='line-clamp-one'>{event.event_detail.title}</div>}
         subheader= {
-          <div style={{display: "flex", marginTop: "1px"}}>
+          <div style={{display: "flex", marginTop: "3px"}}>
             <LocationOnOutlinedIcon />
             {locationString(event.event_detail.location)}
+            <div style={{textAlign: "right", fontSize: "small", marginTop: "1px", marginLeft: "auto", color: "rgba(0, 0, 0, 0.6)"}}>Created {dayjs(event.event_detail.created_at).fromNow()}</div>
           </div>
         }
       />
