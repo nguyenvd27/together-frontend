@@ -157,7 +157,7 @@ const Login: NextPage = () => {
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/register">
+                    <Link href={router.query["next-page"] == "new-event" ? "/register?next-page=new-event" : "/register"}>
                       {"Don't have an account? Register"}
                     </Link>
                   </Grid>
