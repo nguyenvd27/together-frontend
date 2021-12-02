@@ -191,7 +191,7 @@ const Register: NextPage = () => {
                 <ButtonSpinner onClick={register} loading={loading} buttonName="Register" />
                 <Grid container>
                   <Grid item>
-                    <Link href="/login">
+                    <Link href={router.query["next-page"] == "new-event" ? "/login?next-page=new-event" : "/login"}>
                       {"Have an account? Sign In"}
                     </Link>
                   </Grid>
