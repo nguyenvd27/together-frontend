@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  together_frontend:
+    restart: "no"
+    build:
+      context: .
+      dockerfile: ./deployments/Dockerfile
+    ports:
+      - "3000:3000"
